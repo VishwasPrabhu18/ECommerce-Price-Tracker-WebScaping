@@ -49,7 +49,7 @@ export async function sracpeAndStoreProduct(productUrl: string) {
   }
 };
 
-export async function fetchProductById(productId: string) {
+export async function getProductById(productId: string) {
   if (!productId) return;
 
   try {
@@ -62,5 +62,17 @@ export async function fetchProductById(productId: string) {
     return product;
   } catch (error: any) {
     throw new Error(`Failed to fetch product: ${error.message}`)
+  }
+};
+
+export async function getAllProducts() { 
+  try {
+    connectToDatabase();
+
+    const products = await Product.find();
+
+    return products;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`)
   }
 };
