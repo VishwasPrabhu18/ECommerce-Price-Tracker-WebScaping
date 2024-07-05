@@ -45,7 +45,7 @@ export async function sracpeAndStoreProduct(productUrl: string) {
     revalidatePath(`/product/${newProduct._id}`);
 
   } catch (error: any) {
-    throw new Error(`Failed to create/update product: ${error.message}`)
+    throw new Error(`Failed to create/update product: ${error.message}`);
   }
 };
 
@@ -72,6 +72,24 @@ export async function getAllProducts() {
     const products = await Product.find();
 
     return products;
+  } catch (error: any) {
+    throw new Error(`Failed to fetch products: ${error.message}`)
+  }
+};
+
+export async function getSimilarProducts(productId: string) { 
+  try {
+    connectToDatabase();
+
+    const currentProduct = await Product.findById(productId);
+
+    if (!currentProduct) return null;
+
+    const similarProduct = await Product.find({
+      _id: { $ne: productId },
+    }).limit(4);
+
+    return similarProduct;
   } catch (error: any) {
     throw new Error(`Failed to fetch products: ${error.message}`)
   }
